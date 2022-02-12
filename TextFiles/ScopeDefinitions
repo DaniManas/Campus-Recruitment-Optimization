@@ -51,6 +51,7 @@ Phases -
         - avg salary, cgpa wise graphs, salary wise graphs
         - Student wise graphs - like normal distributions
         - Year wise
+        - College specific reports
 
 
 
@@ -59,7 +60,33 @@ Phases -
         - LinkedIn, HackerRank, CodeChef
     - Suggestions
     - Email Customizations
+    - Show & Edit own profile
+    - Show Reports
+    - Send Communication to TNP coordinators - Contact of TNP co-ordinators
+    - Company Details - Interested in Applying?
+    - View JDs / View past visited companies / criteria
+    - Student profile - company suggestions - ambi /mod /safe (Enhancement)
+    - Chat/Doubt Forum (Enhancements)
+    - Company Alerts for students - Email + Whatsapp
+    - Easy Apply process
+    - Resume builder - for 3-5 templates
+
 
 3. Admin / TNP - Company POV
-- Send reminders to Companies
+    - Send reminders to Companies
+    - Send Invitations to Companies at once through filtering
+    - DB maintenance company POC details plus TNP contact details - selling - backend - common
+    - Send greetings
+    - <Need brainstorming>
+
 3. Companies Integration
+    - Company as a Entity register for hiring
+    - Filter Colleges depending upon placements stats
+    - Send Notifications to colleges for hiring
+    - Off-campus hiring program - send notifications to filtered candidates over all colleges
+    - See Students profile, resumes
+
+
+4. Common -
+      students/companies/tpo
+      - Which company visited which campus and hired what people
