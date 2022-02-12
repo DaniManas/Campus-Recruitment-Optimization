@@ -1,0 +1,65 @@
+End Users -
+1. Students
+2. TNP / Admins
+3. Super Admins
+4. Companies
+
+Phases -
+1. Admin / TNP - Students POV
+    - Login & Sign Up page - both Admins and Students
+        - Login Service
+        - Sign Up Service
+        - multi - factor Authentication, git-hub login
+        - Enhancements - Sessions Token logins
+        - Email and whatsapp / Phone number verification while signing up
+        - Update for passwords and emails
+        - forgot password
+
+
+    - CRUD Operations - Students and Company DB
+        - All fields for Admin
+        - Overwrite power unlimited
+        - Send notification to Students once updated - check on portal
+        - Show Profile
+
+
+    - Deciding Criteria to get eligible students
+        - Filter Students with different criteria -> Send notification or not
+        - Get Studnts Details & Download CSV Option with details -> Check boxes for col names
+
+    - Admin Verification for Documents
+        - Get Notification once students updates documents
+        - Once verified freeze cols for students for updates
+
+
+    - Send Notifications -> Multiple types
+        - OmniChannel - Whatsapp + Mail + In-house notifications
+        - Practice TNP / Aptitude tests notifications
+        - Send Notifications for qualified students
+
+    - Manual Update after Company declares results - send reminders to Admins
+        - Send automated notifications for TNP to update details every 15 days 10 AM
+        - Parse CSV - template CSV
+        - Send email notification with updated reports(Optional)
+
+
+    - Reports Generation
+        - Sagregated report at the end of year as well
+        - Placed unplaced bar graph
+        - bar graphs depending on companies / departments etc
+        - male/female ratio graphs
+        - avg salary, cgpa wise graphs, salary wise graphs
+        - Student wise graphs - like normal distributions
+        - Year wise
+
+
+
+2. Students POV Integration
+    - Socials Integration
+        - LinkedIn, HackerRank, CodeChef
+    - Suggestions
+    - Email Customizations
+
+3. Admin / TNP - Company POV
+- Send reminders to Companies
+3. Companies Integration
