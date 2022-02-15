@@ -133,6 +133,68 @@ entityIdentifier varchar(1), --possible values S-Student
 
 );
 
+====================================================================================================
+===================================       STUDENT EXTENDED TABLE     ===============================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS StudentDetailsExtended (
+studentExId int AUTO_INCREMENT PRIMARY KEY,
+studentExStudentId int foreign key,
+
+-- EDUCATION DETAILS START HERE
+studentTenthCGPA float,
+studentTwelfthCGPA float,
+
+studentTenthPercentage float,
+studentTwelfthPercentage float,
+
+studentFirstSemCGPA float,
+studentSecondSemCGPA float,
+studentThirdSemCGPA float,
+studentFourthSemCGPA float,
+studentFifthSemCGPA float,
+studentSixthSemCGPA float,
+studentSeventhSemCGPA float,
+studentEightthSemGCPA float,
+
+studentAvgCGPA float,
+studentAvgSGPA float,
+
+studentisDiploma boolean,
+studentDiplomaMarks float,
+
+studentisBacklog boolean,
+studentNumberOfBacklogs int,
+studentActiveBacklog int,
+studentPassiveBacklog int,
+
+studentisYD boolean,
+studentYDYears int,
+
+studentisEducationGap boolean,
+studentEducationGapYears int,
+
+-- Graduation Details
+studentGraduationYear date,
+studentisGraduated boolean,
+studentUniversityName varchar(50),
+
+);
+
+====================================================================================================
+===================================       STUDENT COMPANY TABLE     ================================
+====================================================================================================
+
+-- CREATE TABLE
+
+CREATE TABLE IF NOT EXISTS Student_company (
+SCId int AUTO_INCREMENT PRIMARY KEY,
+SCStudentId int,
+SCTCId int FOREIGN KEY 
+);
+
+
+
 
 ====================================================================================================
 ===================================       FACULTY TABLE      =======================================
@@ -196,6 +258,7 @@ companyPOCMobileNumber varchar(100) not null unique,
 companyPOCDesignation varchar(30),
 companyPOCEmailVerified boolean,
 companyPOCMobileNumberVerified boolean,
+collegeId int foreign key
 
 
 -- LOGIN DETAILS START HERE
