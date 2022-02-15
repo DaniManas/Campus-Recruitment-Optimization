@@ -11,7 +11,7 @@ Total Tables -
 
 
   -- Final Table
-  7. TME TABLE
+  8. TME TABLE
 
 
 -- RELATIONAL DATABASE MANAGEMENT SYSTEM (RDMS)
@@ -27,7 +27,7 @@ USE TNP_MADE_EASY;
 
 -- CREATE TABLE
 
-CREATE TABLE IF NOT EXISTS <CollegeName>_StudentDetails (
+CREATE TABLE IF NOT EXISTS StudentDetails (
 
 -- GENETAL INFORMATION
 studentId int AUTO_INCREMENT PRIMARY KEY,
@@ -64,8 +64,8 @@ isMobileNumberVerified boolean,
 studentTenthCGPA float,
 studentTwelfthCGPA float,
 
-studentTenthGrade float,
-studentTwelfthGrade float,
+studentTenthPercentage float,
+studentTwelfthPercentage float,
 
 studentFirstSemCGPA float,
 studentSecondSemCGPA float,
@@ -105,10 +105,10 @@ studentDepartmentId int foreign key,
 
 
 -- COMPANY PLACEMENT DETAILS START HERE
-comapnyId int foreign key,
+companyId int foreign key,
 isPlaced boolean,
 placementTime TimeStamp,
-placementPackage float,
+placementSalary float,
 
 
 -- LOGIN DETAILS START HERE
@@ -129,6 +129,7 @@ studentProfileUpdateTimestamp TimeStamp,
 
 -- PROFILE DELETION FLAGS
 studentDeleteProfileFlag boolean,
+entityIdentifier varchar(1), --possible values S-Student
 
 );
 
@@ -139,7 +140,7 @@ studentDeleteProfileFlag boolean,
 
 -- CREATE TABLE
 
-CREATE TABLE IF NOT EXISTS <CollegeName>_Faculty (
+CREATE TABLE IF NOT EXISTS Faculty (
 
 facultyId int AUTO_INCREMENT PRIMARY KEY,
 facultyRegId varchar(10),
@@ -286,8 +287,6 @@ TMEId int AUTO_INCREMENT PRIMARY KEY,
 TMEStudentId int foreign key,
 TMEStudentCollegeId int foreign key,
 TMEStudentCompanyId int foreign key,
-TMEStudentFirstName varchar(30),
-TMEStudentFirstName varchar(30),
 
 
 -- PROFILE RELATED TIMESTAMPS
@@ -310,7 +309,8 @@ TCCompanyId int foreign key,
 TCCompanyVisitYear Date,
 TCCompanySalaryOffered float,
 TCCompanyJD varchar(50), -- will be a path to file to a static folder
-
+TCCompanyRoleNameOffered varchar(50)
+TCJobLocationOffered varchar(30)
 
 -- PROFILE RELATED TIMESTAMPS
 TCProfileCreateTimestamp TimeStamp,
