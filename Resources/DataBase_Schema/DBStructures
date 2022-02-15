@@ -58,7 +58,6 @@ studentisPassport boolean,
 studentisIndian boolean,
 isEmailVerified boolean,
 isMobileNumberVerified boolean,
--- FLAGS FOR PII END HERE
 
 
 -- EDUCATION DETAILS START HERE
@@ -169,8 +168,6 @@ entityIdentifier varchar(1), --possible values F-faculty
 =====================================       ROLES TABLE      =======================================
 ====================================================================================================
 
--- CREATE TABLE
-
 CREATE TABLE IF NOT EXISTS Roles (
 RoleId int AUTO_INCREMENT PRIMARY KEY,
 RoleName varchar(30),
@@ -178,16 +175,17 @@ RoleGroup varchar(20),
 );
 
 
-
 ====================================================================================================
 =================================       COMPANY POC TABLE      =====================================
 ====================================================================================================
 
--- CREATE TABLE
-
 CREATE TABLE IF NOT EXISTS CompanyPOC (
 
 CompanyPOCId int AUTO_INCREMENT PRIMARY KEY,
+
+-- TABLE CROSS_CONNECTION PROPERTIES
+companyPOCRoleId int foreign key,
+companyPOCCompanyId int foreign key
 
 -- COMPANY POC DETAILS
 companyPOCFirstName varchar(100),
@@ -198,9 +196,6 @@ companyPOCDesignation varchar(30),
 companyPOCEmailVerified boolean,
 companyPOCMobileNumberVerified boolean,
 
--- TABLE CROSS_CONNECTION PROPERTIES
-companyPOCRoleId  int foreign key,
-companyPOCCompanyId int foreign key
 
 -- LOGIN DETAILS START HERE
 username varchar(50),
@@ -208,16 +203,13 @@ password varchar(300),
 companyPOClastLoggedInTimeStamp TimeStamp,
 companyPOClastLoggedOutTimeStamp TimeStamp,
 companyPOClastModifiedPassword TimeStamp,
-companyPOCentityIdentifier varchar(1), --possible values F-faculty
--- LOGIN DETAILS END HERE
+companyPOCentityIdentifier varchar(1), --possible values C-Company
 
 );
 
 ====================================================================================================
 ===================================       COMPANY TABLE      =======================================
 ====================================================================================================
-
--- CREATE TABLE
 
 CREATE TABLE IF NOT EXISTS Company (
 
@@ -226,17 +218,9 @@ companyId int AUTO_INCREMENT PRIMARY KEY,
 companyName varchar(30),
 companyLocation varchar(20),
 
--- COMPENSATION INFORMATION
-companySalaryOfferedCurrentYear float,
-companySalaryOfferedLastYear float,
-companyAvgSalaryOffered float,
-
--- COMAPNY VISIT DATE INFORMATION
-companyVisitTimestamp TimeStamp
-
 
 -- Company category Ideantifier
-companycategoryId int foreign key,
+companyCategoryId int foreign key,
 
 );
 
@@ -262,15 +246,22 @@ collegeId int AUTO_INCREMENT PRIMARY KEY,
 collegeName varchar(100),
 collegeAddress varchar(300),
 collegePhoneNumber varchar(100),
+
+-- Principle Details
 collegePrincipleContactNumber varchar(100),
 collegePrincipleFirstName varchar(100),
 collegePrincipleLastName varchar(100),
 
--- TPO Results
+-- TPO Details
 collegeTPOFirstName varchar(100),
 collegeTPOLastName varchar(100),
 collegeTPOEmail nvarchar(320) not null unique,
 collegeTPOContactNumber varchar(100) not null unique,
+
+--TIMESTAMP DETAILS
+collegeProfileCreateTimestamp TimeStamp,
+collegeProfileUpdateTimestamp TimeStamp,
+
 );
 
 ====================================================================================================
@@ -285,6 +276,9 @@ collegeDepartmentsName varchar(30), -- possible values - ECE, CSE, IT, etc
 ====================================================================================================
 =======================================       TME TABLE      =======================================
 ====================================================================================================
+
+-- TME - TNP Made Easy
+
 CREATE TABLE IF NOT EXISTS TME_Extended_Table (
 TMEId int AUTO_INCREMENT PRIMARY KEY,
 
@@ -299,5 +293,27 @@ TMEStudentFirstName varchar(30),
 -- PROFILE RELATED TIMESTAMPS
 TMEProfileCreateTimestamp TimeStamp,
 TMEProfileUpdateTimestamp TimeStamp,
+
+);
+
+
+====================================================================================================
+===============================      College - COMPANY TABLE      ==================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS TPO_Company (
+TCId int AUTO_INCREMENT PRIMARY KEY,
+
+-- TME STUDENT DETAILS
+TCCollegeId int foreign key,
+TCCompanyId int foreign key,
+TCCompanyVisitYear Date,
+TCCompanySalaryOffered float,
+TCCompanyJD varchar(50), -- will be a path to file to a static folder
+
+
+-- PROFILE RELATED TIMESTAMPS
+TCProfileCreateTimestamp TimeStamp,
+TCProfileUpdateTimestamp TimeStamp,
 
 );
