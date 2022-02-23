@@ -1,0 +1,20 @@
+Step - 1
+    Install MySQL workbench
+
+Step - 2
+    Create a User in MYSQL with -
+        Username - tnpRoot
+        Password - TNPadmin123
+
+Step - 3
+    Execute sql files in order of -
+        1. DataBaseCreation.sql
+        2. CompanyCatagoryTable.sql
+        3. Company.sql
+        4. College.sql
+        5. CollegeDepartments
+        5. Roles.sql
+        6. Faculty.sql
+        7. Company-POC Table
+        8. College Company Table
+        9.

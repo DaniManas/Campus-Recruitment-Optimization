@@ -14,12 +14,235 @@ Total Tables -
   8. TME TABLE
 
 
+====================================================================================================
+===============================       DataBase Creation SQL      ===================================
+====================================================================================================
+
+
 -- RELATIONAL DATABASE MANAGEMENT SYSTEM (RDMS)
 CREATE DATABASE IF NOT EXISTS TNP_MADE_EASY;
 
 
 -- USE DATABASE
 USE TNP_MADE_EASY;
+
+
+====================================================================================================
+===============================       COMPANY category TABLE     ===================================
+====================================================================================================
+
+-- CREATE TABLE
+
+CREATE TABLE IF NOT EXISTS CompanyCatagory (
+CompanycategoryId int NOT NULL AUTO_INCREMENT,
+CompanycategoryName varchar(30), -- possible values - Dream, Premium, Semi-Premium, Normal
+PRIMARY KEY(CompanycategoryId)
+);
+
+====================================================================================================
+===================================       COMPANY TABLE      =======================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS Company (
+
+-- GENERAL INFORMATION
+companyId int AUTO_INCREMENT,
+companyName varchar(30),
+companyLocation varchar(20),
+
+
+-- Company category Ideantifier
+companyCategoryId int,
+PRIMARY KEY(companyId),
+
+INDEX par_ind (companyCategoryId),
+CONSTRAINT fk_companyCategoryId FOREIGN KEY (companyCategoryId)
+REFERENCES companycatagory(CompanycategoryId)
+ON DELETE SET NULL
+);
+
+====================================================================================================
+===================================       COLLEGE TABLE      =======================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS College (
+
+collegeId int AUTO_INCREMENT,
+collegeName varchar(100),
+collegeAddress varchar(300),
+collegePhoneNumber varchar(100),
+
+-- Principle Details
+collegePrincipleFirstName varchar(100),
+collegePrincipleLastName varchar(100),
+collegePrincipleEmail nvarchar(320) not null unique,
+collegePrincipleContactNumber varchar(100) not null,
+
+-- TPO Details
+collegeTPOFirstName varchar(100),
+collegeTPOLastName varchar(100),
+collegeTPOEmail nvarchar(320) not null unique,
+collegeTPOContactNumber varchar(100) not null unique,
+
+-- TIMESTAMP DETAILS
+collegeProfileCreateTimestamp TimeStamp,
+collegeProfileUpdateTimestamp TimeStamp,
+
+PRIMARY KEY(collegeId)
+);
+
+
+====================================================================================================
+=============================     COLLEGE DEPARTMENTS TABLE      ===================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS CollegeDepartments (
+collegeDepartmentsId int AUTO_INCREMENT PRIMARY KEY,
+collegeDepartmentsName varchar(30), -- possible values - ECE, CSE, IT, etc
+
+);
+
+
+====================================================================================================
+=====================================       ROLES TABLE      =======================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS Roles (
+RoleId int NOT NULL UNIQUE AUTO_INCREMENT,
+RoleName varchar(30),
+RoleGroup varchar(20),
+PRIMARY KEY(RoleId)
+);
+
+
+
+====================================================================================================
+===================================       FACULTY TABLE      =======================================
+====================================================================================================
+
+-- CREATE TABLE
+
+CREATE TABLE IF NOT EXISTS Faculty (
+
+facultyId int NOT NULL UNIQUE AUTO_INCREMENT,
+facultyRegId varchar(10),
+facultyFirstName varchar(100),
+facultyLastName varchar(100),
+facultyEmail nvarchar(320) not null unique,
+facultyMobileNumber varchar(100) not null unique,
+
+facultyCollegeId int, -- foreign key,
+facultyDepartmentId int, -- foreign key,
+facultyRoleId  int, -- foreign key,
+
+facultyisEmailVerified boolean,
+facultyisMobileNumberVerified boolean,
+
+
+-- LOGIN DETAILS START HERE
+username varchar(50),
+password varchar(300),
+lastLoggedInTimeStamp TimeStamp,
+lastLoggedOutTimeStamp TimeStamp,
+lastModifiedPassword TimeStamp,
+entityIdentifier varchar(1), -- possible values F-faculty
+
+PRIMARY KEY(facultyId),
+
+INDEX par_ind (facultyId),
+CONSTRAINT fk_facultyDepartmentId FOREIGN KEY (facultyDepartmentId)
+REFERENCES collegedepartments(collegeDepartmentsId)
+ON DELETE SET NULL,
+
+CONSTRAINT fk_facultyCollegeId FOREIGN KEY (facultyCollegeId)
+REFERENCES college(collegeId)
+ON DELETE SET NULL ,
+
+CONSTRAINT fk_facultyRoleId FOREIGN KEY (facultyRoleId)
+REFERENCES roles(RoleId)
+ON DELETE SET NULL
+
+);
+
+
+====================================================================================================
+=================================       COMPANY POC TABLE      =====================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS CompanyPOC (
+
+CompanyPOCId int NOT NULL AUTO_INCREMENT,
+
+-- TABLE CROSS_CONNECTION PROPERTIES
+companyPOCRoleId int, -- foreign key,
+companyPOCCompanyId int, -- foreign key
+companyPOCCollegeId int, -- foreign key
+
+-- COMPANY POC DETAILS
+companyPOCFirstName varchar(100),
+companyPOCLastName varchar(100),
+companyPOCEmail nvarchar(320) not null unique,
+companyPOCMobileNumber varchar(100) not null unique,
+companyPOCDesignation varchar(30),
+companyPOCEmailVerified boolean,
+companyPOCMobileNumberVerified boolean,
+
+
+-- LOGIN DETAILS START HERE
+username varchar(50),
+password varchar(300),
+companyPOClastLoggedInTimeStamp TimeStamp,
+companyPOClastLoggedOutTimeStamp TimeStamp,
+companyPOClastModifiedPassword TimeStamp,
+companyPOCentityIdentifier varchar(1), -- possible values C-Company
+
+PRIMARY KEY(CompanyPOCId),
+INDEX par_ind (CompanyPOCId),
+
+CONSTRAINT fk_companyPOCCompanyId FOREIGN KEY (companyPOCCompanyId)
+REFERENCES company(companyId)
+ON DELETE SET NULL,
+
+CONSTRAINT fk_companyPOCCollegeId FOREIGN KEY (companyPOCCollegeId)
+REFERENCES college(collegeId)
+ON DELETE SET NULL ,
+
+CONSTRAINT fk_companyPOCRoleId FOREIGN KEY (companyPOCRoleId)
+REFERENCES roles(RoleId)
+ON DELETE SET NULL
+);
+
+
+====================================================================================================
+===============================      College - COMPANY TABLE      ==================================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS College_Company (
+CCId int AUTO_INCREMENT PRIMARY KEY,
+
+CCCompanyVisitYear datetime,
+CCCompanySalaryOffered float,
+CCCompanyJD varchar(50), -- will be a path to file to a static folder
+CCCompanyRoleNameOffered varchar(50),
+CCJobLocationOffered varchar(30),
+
+-- TME STUDENT DETAILS
+CCCollegeId int, -- foreign key,
+CCCompanyId int, -- foreign key,
+
+-- PROFILE RELATED TIMESTAMPS
+CCProfileCreateTimestamp TimeStamp,
+CCProfileUpdateTimestamp TimeStamp,
+
+INDEX par_ind (CCId),
+CONSTRAINT fk_CCCompanyId FOREIGN KEY (CCCompanyId)
+REFERENCES company(companyId)
+ON DELETE SET NULL,
+
+CONSTRAINT fk_CCCollegeId FOREIGN KEY (CCCollegeId)
+REFERENCES college(collegeId)
+ON DELETE SET NULL
+);
 
 ====================================================================================================
 ===================================       STUDENT TABLE      =======================================
@@ -30,12 +253,12 @@ USE TNP_MADE_EASY;
 CREATE TABLE IF NOT EXISTS StudentDetails (
 
 -- GENETAL INFORMATION
-studentId int AUTO_INCREMENT PRIMARY KEY,
+studentId int NOT NULL UNIQUE AUTO_INCREMENT,
 studentRegistrationId varchar(11) not null unique,
 studentRollNumber int not null unique,
 studentGender varchar(1),
-studentRoleId int foreign key,
-studentisTNPCoordinator boolean,
+studentNationality varchar(20),
+studentRoleId int, -- foreign key,
 
 -- PII DATA STARTS HERE
 studentFirstName varchar(100),
@@ -47,7 +270,6 @@ studentMobileNumber varchar(100) not null unique,
 studentAadhar varchar(100) not null unique,
 studentPAN	varchar(100) unique,
 studentPassport varchar(100) unique,
-studentNationality varchar(20),
 studentPermanantAddress varchar(500),
 studentResidentialAddress varchar(500),
 
@@ -60,6 +282,71 @@ studentisIndian boolean,
 isEmailVerified boolean,
 isMobileNumberVerified boolean,
 
+
+-- COLLEGE DETAILS START HERE
+studentCollegeId int, -- foreign key,
+studentDepartmentId int, -- foreign key,
+
+
+-- COMPANY PLACEMENT DETAILS START HERE
+studentCompanyId int, -- foreign key,
+isPlaced boolean,
+placementTime TimeStamp,
+placementSalary float,
+
+
+-- LOGIN DETAILS START HERE
+username varchar(50),
+password varchar(300),
+lastLoggedInTimeStamp TimeStamp,
+lastLoggedOutTimeStamp TimeStamp,
+lastModifiedPassword TimeStamp,
+
+-- DOCUMENT RELATED STATS
+studentisDocumentVerified boolean,
+studentDocumentUpdateTimestamp TimeStamp,
+studentDocumentCreateTimestamp TimeStamp,
+
+-- PROFILE CREATION TIMESTAMP DETAILS
+studentProfileCreationTimestamp TimeStamp,
+studentProfileUpdateTimestamp TimeStamp,
+
+-- PROFILE DELETION FLAGS
+studentDeleteProfileFlag boolean,
+entityIdentifier varchar(1), -- possible values S-Student
+
+-- Student Socials TABLE
+studentLinkedInUsername varchar(30),
+studentHackerRankUsername varchar(30),
+studentCodeChefUsername varchar(30),
+studentResume varchar(50),
+
+PRIMARY KEY(studentId),
+
+CONSTRAINT fk_studentDepartmentId FOREIGN KEY (studentDepartmentId)
+REFERENCES collegedepartments(collegeDepartmentsId)
+ON DELETE SET NULL,
+
+CONSTRAINT fk_studentCompanyId FOREIGN KEY (studentCompanyId)
+REFERENCES company(companyId)
+ON DELETE SET NULL,
+
+CONSTRAINT fk_studentCollegeId FOREIGN KEY (studentCollegeId)
+REFERENCES college(collegeId)
+ON DELETE SET NULL ,
+
+CONSTRAINT fk_studentRoleId FOREIGN KEY (studentRoleId)
+REFERENCES roles(RoleId)
+ON DELETE SET NULL
+);
+
+====================================================================================================
+===================================       STUDENT EXTENDED TABLE     ===============================
+====================================================================================================
+
+CREATE TABLE IF NOT EXISTS StudentDetailsExtended (
+studentExId int AUTO_INCREMENT,
+studentExStudentId int, -- foreign key,
 
 -- EDUCATION DETAILS START HERE
 studentTenthCGPA float,
@@ -99,182 +386,17 @@ studentGraduationYear date,
 studentisGraduated boolean,
 studentUniversityName varchar(50),
 
--- COLLEGE DETAILS START HERE
-studentCollegeId int foreign key,
-studentDepartmentId int foreign key,
+PRIMARY KEY(studentExId),
+INDEX par_ind (studentExId),
 
-
-
--- COMPANY PLACEMENT DETAILS START HERE
-companyId int foreign key,
-isPlaced boolean,
-placementTime TimeStamp,
-placementSalary float,
-
-
--- LOGIN DETAILS START HERE
-username varchar(50),
-password varchar(300),
-lastLoggedInTimeStamp TimeStamp,
-lastLoggedOutTimeStamp TimeStamp,
-lastModifiedPassword TimeStamp,
-
--- DOCUMENT RELATED STATS
-studentisDocumentVerified boolean,
-studentDocumentUpdateTimestamp TimeStamp,
-studentDocumentCreateTimestamp TimeStamp,
-
--- PROFILE CREATION TIMESTAMP DETAILS
-studentProfileCreationTimestamp TimeStamp,
-studentProfileUpdateTimestamp TimeStamp,
-
--- PROFILE DELETION FLAGS
-studentDeleteProfileFlag boolean,
-entityIdentifier varchar(1), --possible values S-Student
-
+CONSTRAINT fk_studentExStudentId FOREIGN KEY (studentExStudentId)
+REFERENCES StudentDetails(studentId)
+ON DELETE CASCADE
 );
 
 
-====================================================================================================
-===================================       FACULTY TABLE      =======================================
-====================================================================================================
-
--- CREATE TABLE
-
-CREATE TABLE IF NOT EXISTS Faculty (
-
-facultyId int AUTO_INCREMENT PRIMARY KEY,
-facultyRegId varchar(10),
-facultyFirstName varchar(100),
-facultyLastName varchar(100),
-facultyEmail nvarchar(320) not null unique,
-facultyMobileNumber varchar(100) not null unique,
-facultyCollegeId int foreign key,
-facultyDepartment int foreign key,
-facultyisEmailVerified boolean,
-facultyisMobileNumberVerified boolean,
-facultyRoleId  int foreign key,
-
--- LOGIN DETAILS START HERE
-username varchar(50),
-password varchar(300),
-lastLoggedInTimeStamp TimeStamp,
-lastLoggedOutTimeStamp TimeStamp,
-lastModifiedPassword TimeStamp,
-entityIdentifier varchar(1), --possible values F-faculty
 
 
-);
-
-====================================================================================================
-=====================================       ROLES TABLE      =======================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS Roles (
-RoleId int AUTO_INCREMENT PRIMARY KEY,
-RoleName varchar(30),
-RoleGroup varchar(20),
-);
-
-
-====================================================================================================
-=================================       COMPANY POC TABLE      =====================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS CompanyPOC (
-
-CompanyPOCId int AUTO_INCREMENT PRIMARY KEY,
-
--- TABLE CROSS_CONNECTION PROPERTIES
-companyPOCRoleId int foreign key,
-companyPOCCompanyId int foreign key
-
--- COMPANY POC DETAILS
-companyPOCFirstName varchar(100),
-companyPOCLastName varchar(100),
-companyPOCEmail nvarchar(320) not null unique,
-companyPOCMobileNumber varchar(100) not null unique,
-companyPOCDesignation varchar(30),
-companyPOCEmailVerified boolean,
-companyPOCMobileNumberVerified boolean,
-
-
--- LOGIN DETAILS START HERE
-username varchar(50),
-password varchar(300),
-companyPOClastLoggedInTimeStamp TimeStamp,
-companyPOClastLoggedOutTimeStamp TimeStamp,
-companyPOClastModifiedPassword TimeStamp,
-companyPOCentityIdentifier varchar(1), --possible values C-Company
-
-);
-
-====================================================================================================
-===================================       COMPANY TABLE      =======================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS Company (
-
--- GENERAL INFORMATION
-companyId int AUTO_INCREMENT PRIMARY KEY,
-companyName varchar(30),
-companyLocation varchar(20),
-
-
--- Company category Ideantifier
-companyCategoryId int foreign key,
-
-);
-
-====================================================================================================
-===============================       COMPANY category TABLE     ===================================
-====================================================================================================
-
--- CREATE TABLE
-
-CREATE TABLE IF NOT EXISTS Company (
-CompanycategoryId int AUTO_INCREMENT PRIMARY KEY,
-CompanycategoryName varchar(30), -- possible values - Dream, Premium, Semi-Premium, Normal
-
-);
-
-====================================================================================================
-===================================       COLLEGE TABLE      =======================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS College (
-
-collegeId int AUTO_INCREMENT PRIMARY KEY,
-collegeName varchar(100),
-collegeAddress varchar(300),
-collegePhoneNumber varchar(100),
-
--- Principle Details
-collegePrincipleContactNumber varchar(100),
-collegePrincipleFirstName varchar(100),
-collegePrincipleLastName varchar(100),
-
--- TPO Details
-collegeTPOFirstName varchar(100),
-collegeTPOLastName varchar(100),
-collegeTPOEmail nvarchar(320) not null unique,
-collegeTPOContactNumber varchar(100) not null unique,
-
---TIMESTAMP DETAILS
-collegeProfileCreateTimestamp TimeStamp,
-collegeProfileUpdateTimestamp TimeStamp,
-
-);
-
-====================================================================================================
-=============================     COLLEGE DEPARTMENTS TABLE      ===================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS CollegeDepartments (
-collegeDepartmentsId int AUTO_INCREMENT PRIMARY KEY,
-collegeDepartmentsName varchar(30), -- possible values - ECE, CSE, IT, etc
-
-);
 ====================================================================================================
 =======================================       TME TABLE      =======================================
 ====================================================================================================
@@ -296,25 +418,3 @@ TMEProfileUpdateTimestamp TimeStamp,
 
 );
 
-
-====================================================================================================
-===============================      College - COMPANY TABLE      ==================================
-====================================================================================================
-
-CREATE TABLE IF NOT EXISTS TPO_Company (
-TCId int AUTO_INCREMENT PRIMARY KEY,
-
--- TME STUDENT DETAILS
-TCCollegeId int foreign key,
-TCCompanyId int foreign key,
-TCCompanyVisitYear Date,
-TCCompanySalaryOffered float,
-TCCompanyJD varchar(50), -- will be a path to file to a static folder
-TCCompanyRoleNameOffered varchar(50)
-TCJobLocationOffered varchar(30)
-
--- PROFILE RELATED TIMESTAMPS
-TCProfileCreateTimestamp TimeStamp,
-TCProfileUpdateTimestamp TimeStamp,
-
-);
