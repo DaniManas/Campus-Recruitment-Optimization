@@ -1,0 +1,18 @@
+Step - 1
+    Install requirements.txt
+    Command - pip install -r requirements.txt
+
+Step - 2
+    Install mySQL workbench
+    Setup Databases by following Resources/TextFiles/HowToSetUpDBs
+
+Step - 3
+    1. Run init.py from Root folder.
+
+Before Pushing your Code:
+ 1. Run this from GitBash/Linux Terminal - find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+
+To Start Django Project - django-admin startproject mysite
+To run Run Django Server -
+              cd to relationalDBManagement
+              python manage.py runserver
