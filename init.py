@@ -5,45 +5,102 @@
 #  Developer Email: bhilegaonkar11@gmail.com
 #  -----------------------------------------------------------------------
 
-from Resources.Constants import DEFAULT_OS, PTH_FILE_NAME, WINDOWS_PTH_FILE_PATH, LINUX_PATH_FILE_PATH
 import sys
 import platform
 import os
+import argparse
 
-# GET CURRENT OPERATING SYSTEM
-os_name = platform.system()
+from Resources.Constants import DEFAULT_OS, PTH_FILE_NAME, WINDOWS_PTH_FILE_PATH, LINUX_PATH_FILE_PATH
+from Utils.OSUtils.OSOperations import getLinuxPath, getWindowsPath
+from Utils.DBUtils.dataBaseCommandExecutor import createDBBootUp
+from Resources.DataBaseProperties import SQL_CREATE_FILE_NAMES, SQL_DELETE_FILE_NAMES
 
-# GET PYTHON VERSION INFORMATION
-pythonMajorVersion = sys.version_info.__getattribute__("major")
-pythonMinorVersion = sys.version_info.__getattribute__("minor")
+# Adding Parsers
+parser = argparse.ArgumentParser(description='Get the flags for Adding Path File and Creating,Deleting or Do Nothing '
+                                             'to the Tables')
+parser.add_argument('--addPthFile', dest='addPthFile', type=str, help='Set True for Adding Project Path to SYS PATH '
+                                                                      'Set False if you have already added it.')
+parser.add_argument('--setUpDB', dest='setUpDB', type=str, help='setUpDB takes three arguments -'
+                                                                '1. Create - Used for Creating all necessary tables on the Machine.'
+                                                                '2. Delete - Used for Deleting all necessary tables from Machine.'
+                                                                '3. Nothing - Default Option to do Nothing.')
 
-# GET PRESENT WORKING DIRECTORY - IDEALLY SHOULD BE THE FOLDER PATH
-# TO PROJECT BASE DIRECTORY
-currDirectory = os.getcwd()
+args = parser.parse_args()
 
 
-# CHECK IF THE OS IS WINDOWS OR NOT
-if os_name.lower() != DEFAULT_OS.lower():
+def getBoolArgument(stringArgument):
+    if stringArgument.lower() == "true":
+        addPthFile = True
+    elif stringArgument.lower() == "false":
+        addPthFile = False
+    else:
+        addPthFile = None
+    return addPthFile
 
-    # IF ITS OTHER THAN WINDOWS, THEN PREPARE PATH OF LINUX
-    currDirectory = currDirectory.replace("\\", "/")
-    filePathDestination = LINUX_PATH_FILE_PATH.format(pythonMajorVersion, pythonMinorVersion, PTH_FILE_NAME)
+
+setUpDB = args.setUpDB
+addPthFileFlag = getBoolArgument(args.addPthFile)
+
+if (addPthFileFlag is None) or (setUpDB is None):
+    print("Please provide Necessary Arguments")
+    sys.exit(-1)
+
+
+def executeSQL(FileNameList):
+    print("Executing SQL Files: {}".format(FileNameList))
+    try:
+        createDBBootUp(FileNameList)
+        print("All SQL Files were processed Successfully!")
+    except Exception as exp:
+        print("DataBase Booting up failed!!! Try Setting DataBase values in DataBaseProperties.py")
+        print(exp)
+
+
+if addPthFileFlag:
+    # GET CURRENT OPERATING SYSTEM
+    os_name = platform.system()
+
+    # GET PYTHON VERSION INFORMATION
+    pythonMajorVersion = sys.version_info.__getattribute__("major")
+    pythonMinorVersion = sys.version_info.__getattribute__("minor")
+
+    # GET PRESENT WORKING DIRECTORY - IDEALLY SHOULD BE THE FOLDER PATH
+    # TO PROJECT BASE DIRECTORY
+    currDirectory = os.getcwd()
+
+    # CHECK IF THE OS IS WINDOWS OR NOT
+    if os_name.lower() != DEFAULT_OS.lower():
+
+        # IF ITS OTHER THAN WINDOWS, THEN PREPARE PATH OF LINUX
+        currDirectory = getLinuxPath(currDirectory)
+        filePathDestination = LINUX_PATH_FILE_PATH.format(pythonMajorVersion, pythonMinorVersion, PTH_FILE_NAME)
+
+    else:
+        # OTHERWISE, PREPARE PATH FOR WINDOWS
+        currDirectory = getWindowsPath(currDirectory)
+
+        # GET PRESENT USER IF ITS WINDOWS - IDEALLY SHOULD BE THE FOLDER PATH
+        # TO PROJECT BASE DIRECTORY
+        currUser = os.path.expanduser('~')
+        filePathDestination = WINDOWS_PTH_FILE_PATH.format(currUser, pythonMajorVersion, pythonMinorVersion,
+                                                           PTH_FILE_NAME)
+
+        filePathDestination = getWindowsPath(filePathDestination)
+
+    # CREATE A FILE WITH .PTH EXTENSIONS TO COPY IT TO SITE-PACKAGES
+    f = open(filePathDestination, "w+")
+    f.write(currDirectory)
+    f.close()
+
+    print("Pth file was added successfully to the path: {}".format(filePathDestination))
 
 else:
-    # OTHERWISE, PREPARE PATH FOR WINDOWS
-    currDirectory = currDirectory.replace("\\", "\\\\")
+    print("You have Opted not to add Pth File.")
 
-    # GET PRESENT USER IF ITS WINDOWS - IDEALLY SHOULD BE THE FOLDER PATH
-    # TO PROJECT BASE DIRECTORY
-    currUser = os.path.expanduser('~')
-    filePathDestination = WINDOWS_PTH_FILE_PATH.format(currUser, pythonMajorVersion, pythonMinorVersion, PTH_FILE_NAME)
+if setUpDB.lower() == "create":
+    executeSQL(SQL_CREATE_FILE_NAMES)
 
-    filePathDestination = filePathDestination.replace("\\", "\\\\")
-
-
-# CREATE A FILE WITH .PTH EXTENSIONS TO COPY IT TO SITE-PACKAGES
-f = open(filePathDestination, "w+")
-f.write(currDirectory)
-f.close()
-
-print("Pth file was added successfully to the path: {}".format(filePathDestination))
+elif setUpDB.lower() == "delete":
+    executeSQL(SQL_DELETE_FILE_NAMES)
+else:
+    print("You have Opted not doing any changes to Tables in DB.")

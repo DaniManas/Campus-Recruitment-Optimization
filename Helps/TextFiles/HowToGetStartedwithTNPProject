@@ -7,7 +7,11 @@ Step - 2
     Setup Databases by following Resources/TextFiles/HowToSetUpDBs
 
 Step - 3
-    1. Run init.py from Root folder.
+    1. Run the following command
+        1. if you're running the project for the first time.
+            init.py --addPthFile True --setUpDB Create
+        2. if you're running the project and you want to delete tables
+            --addPthFile False --setUpDB delete
 
 Before Pushing your Code:
  1. Run this from GitBash/Linux Terminal - find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf

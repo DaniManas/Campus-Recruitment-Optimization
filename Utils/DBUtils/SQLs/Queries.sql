@@ -1,0 +1,1 @@
+RENAME TABLE tnp_made_easy.companycatagory TO tnp_made_easy.companycategory;

@@ -1,1 +1,0 @@
-SELECT * FROM tnp_made_easy.companycatagory;

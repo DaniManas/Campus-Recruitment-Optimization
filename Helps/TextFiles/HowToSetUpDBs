@@ -15,15 +15,4 @@ The difference between these two users will be one will be admin and other will 
 but not delete
 
 Step - 4
-    Execute sql files in order of -
-        1. DataBaseCreation.sql
-        2. CompanyCategoryTable.sql
-        3. Company.sql
-        4. College.sql
-        5. CollegeDepartments
-        5. Roles.sql
-        6. Faculty.sql
-        7. Company-POC Table
-        8. College Company Table
-        9. Student Details
-        10. StudentDetailsExtended table
+    Execute init.py File

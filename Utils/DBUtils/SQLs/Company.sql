@@ -12,6 +12,6 @@ PRIMARY KEY(companyId),
 
 INDEX par_ind (companyId),  
 CONSTRAINT fk_companyCategoryId FOREIGN KEY (companyCompanyCategoryId)  
-REFERENCES companycatagory(CompanycategoryId)  
+REFERENCES companycategory(CompanycategoryId)
 ON DELETE SET NULL 
 );
