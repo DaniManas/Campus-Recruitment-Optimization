@@ -3,7 +3,11 @@ CREATE TABLE IF NOT EXISTS College (
 
 collegeId int NOT NULL UNIQUE AUTO_INCREMENT,
 collegeName varchar(100),
-collegeAddress varchar(300),
+collegeAddressLineOne varchar(100),
+collegeAddressLineTwo varchar(100),
+collegeCity varchar(15),
+collegeState varchar(20),
+collegeCountry varchar(20),
 collegePhoneNumber varchar(100),
 
 -- Principle Details

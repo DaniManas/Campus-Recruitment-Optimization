@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS College_Company (
+CREATE TABLE IF NOT EXISTS CollegeCompany (
 CCId int AUTO_INCREMENT PRIMARY KEY,
 
 CCCompanyVisitYear datetime,

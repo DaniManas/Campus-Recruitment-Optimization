@@ -1,4 +1,5 @@
 PROJECT = "PlacementsMadeEasy"
+ENVIRONMENT = "PROD" # - POSSIBLE VALUES - DEV, PROD
 DEFAULT_OS = "Windows"
 PTH_FILE_NAME = "addMeToSitePackagePath.pth"
 WINDOWS_PTH_FILE_PATH = "{}\\AppData\\Local\\Programs\\Python\\Python{}{}\\Lib\\site-packages\\{}"

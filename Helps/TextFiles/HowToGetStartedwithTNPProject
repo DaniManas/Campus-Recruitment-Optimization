@@ -16,7 +16,7 @@ Step - 3
 Before Pushing your Code:
  1. Run this from GitBash/Linux Terminal - find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 
-To Start Django Project - django-admin startproject mysite
+To Start Django Project - django-admin startproject <projectName_frontEnd>
 To run Run Django Server -
               cd to relationalDBManagement
               python manage.py runserver

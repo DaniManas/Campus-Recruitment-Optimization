@@ -1,1 +1,8 @@
 https://www.youtube.com/watch?v=tzAXG3ZNBHc - How to Store PDF in SQL
+https://hackersandslackers.com/python-database-management-sqlalchemy/ - Best Resource for SQLAlchemy
+
+Command to Create Python sqlalchemy classes from SQL -
+pip3 install sqlacodegen
+sqlacodegen mysql+pymysql://root@localhost/your_database_name
+
+https://pythonbasics.org/flask-sqlalchemy/

@@ -11,6 +11,7 @@ import os
 import argparse
 
 from Resources.Constants import DEFAULT_OS, PTH_FILE_NAME, WINDOWS_PTH_FILE_PATH, LINUX_PATH_FILE_PATH
+from Utils.DBUtils.createTables import createTablesUsingSQLAlchemy
 from Utils.OSUtils.OSOperations import getLinuxPath, getWindowsPath
 from Utils.DBUtils.dataBaseCommandExecutor import createDBBootUp
 from Resources.DataBaseProperties import SQL_CREATE_FILE_NAMES, SQL_DELETE_FILE_NAMES
@@ -24,6 +25,10 @@ parser.add_argument('--setUpDB', dest='setUpDB', type=str, help='setUpDB takes t
                                                                 '1. Create - Used for Creating all necessary tables on the Machine.'
                                                                 '2. Delete - Used for Deleting all necessary tables from Machine.'
                                                                 '3. Nothing - Default Option to do Nothing.')
+parser.add_argument('--withSQL', dest='withSQL', type=str, help='withSQL takes True or False'
+                                                                '1. True - It will use SQLAlchemy to create DBs'
+                                                                '2. False - It will use SQL files to create DBS.'
+                    )
 
 args = parser.parse_args()
 
@@ -40,7 +45,8 @@ def getBoolArgument(stringArgument):
 
 setUpDB = args.setUpDB
 addPthFileFlag = getBoolArgument(args.addPthFile)
-
+print(args)
+withSQL = getBoolArgument(args.withSQL)
 if (addPthFileFlag is None) or (setUpDB is None):
     print("Please provide Necessary Arguments")
     sys.exit(-1)
@@ -98,7 +104,10 @@ else:
     print("You have Opted not to add Pth File.")
 
 if setUpDB.lower() == "create":
-    executeSQL(SQL_CREATE_FILE_NAMES)
+    if withSQL:
+        executeSQL(SQL_CREATE_FILE_NAMES)
+    else:
+        createTablesUsingSQLAlchemy()
 
 elif setUpDB.lower() == "delete":
     executeSQL(SQL_DELETE_FILE_NAMES)
